@@ -1,0 +1,2 @@
+class WorldRankScraper:
+    pass
