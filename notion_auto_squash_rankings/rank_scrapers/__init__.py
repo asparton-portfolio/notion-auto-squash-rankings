@@ -1,13 +1,10 @@
 """Package used to store classes able to scrap the squash players ranking.
 
-Modules
---------
-RankScraper : 
-    Base abstract class used to define the default RankScraper's behaviours.
-WorldRankScraper : 
-    RankScraper able to get the world rankings.
-FrenchRankScraper : 
-    RankScraper able to get french rankings.
+Modules:
+    RankScraper: Base abstract class used to define the default RankScraper's 
+                 behaviours.
+    WorldRankScraper: RankScraper able to get the world rankings.
+    FrenchRankScraper: RankScraper able to get french rankings.
 """
 
 from rank_scrapers.RankScraper import RankScraper
