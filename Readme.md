@@ -1,0 +1,1 @@
+# Notion auto squash rankings
