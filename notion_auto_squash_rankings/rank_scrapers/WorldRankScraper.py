@@ -24,6 +24,7 @@ class WorldRankScraper(RankScraper):
         scrap_res = []
         
         doc = get_bs4_from_url(self.url)
+        
         players_info = WorldRankScraper.get_players_ranking_info(doc)
         for player_info in players_info:
             scrap_res.append({

@@ -3,13 +3,16 @@ name = "notion-auto-squash-rankings"
 version = "0.1.0"
 description = "Scraps information about the squash world & french rankings, and update notion databases to visualize the players ranking."
 authors = ["Alexandre Sparton <sparton.alexandre@gmail.com>"]
-readme = "README.md"
+readme = "Readme.md"
 packages = [{include = "notion_auto_squash_rankings"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 requests = "^2.28.1"
 beautifulsoup4 = "^4.11.1"
+selenium = "^4.5.0"
+webdriver-manager = "^3.8.4"
+html5lib = "^1.1"
 
 
 [build-system]
