@@ -7,6 +7,5 @@ Modules:
     FrenchRankScraper: RankScraper able to get french rankings.
 """
 
-from rank_scrapers.RankScraper import RankScraper
 from rank_scrapers.WorldRankScraper import WorldRankScraper
 from rank_scrapers.FrenchRankScraper import FrenchRankScraper
