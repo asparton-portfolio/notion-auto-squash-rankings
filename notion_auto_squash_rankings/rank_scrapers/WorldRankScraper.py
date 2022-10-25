@@ -28,9 +28,9 @@ class WorldRankScraper(RankScraper):
         players_info = WorldRankScraper.get_players_ranking_info(doc)
         for player_info in players_info:
             scrap_res.append({
-                "Player's name": WorldRankScraper.get_player_name(player_info),
-                "Nationality": WorldRankScraper.get_player_country(player_info),
-                "Rank": WorldRankScraper.get_player_rank(player_info),   
+                "name": WorldRankScraper.get_player_name(player_info),
+                "country": WorldRankScraper.get_player_country(player_info),
+                "rank": WorldRankScraper.get_player_rank(player_info),   
             })
             
         return scrap_res

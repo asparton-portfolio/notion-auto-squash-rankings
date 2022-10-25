@@ -26,8 +26,8 @@ class FrenchRankScraper(RankScraper):
         players_info = FrenchRankScraper.get_players_ranking_info(doc)
         for player_info in players_info:
             scrap_res.append({
-                "Player's name": FrenchRankScraper.get_player_name(player_info),
-                "Rank": FrenchRankScraper.get_player_rank(player_info),
+                "name": FrenchRankScraper.get_player_name(player_info),
+                "rank": FrenchRankScraper.get_player_rank(player_info),
             })
             
         return scrap_res
