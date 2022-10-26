@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from notion_writers.utils import query_notion
 from datetime import datetime
+from json import dumps as json_dumps
 
 class NotionWriter(ABC):
     """Base abstract class defining how to update the Notion database 
@@ -50,7 +51,9 @@ class NotionWriter(ABC):
         "CAN": "🇨🇦 Canada",
         "MAS": "🇲🇾 Malaysia",
         "JPN": "🇯🇵 Japan",
-        "GUA": "🇬🇹 Guatemala"
+        "GUA": "🇬🇹 Guatemala",
+        "BEL": "🇧🇪 Belgium",
+        "RSA": "🇿🇦 South Africa"
     }
 
     def __init__(self, notion_api_key: str, db_id: str):
@@ -103,6 +106,29 @@ class NotionWriter(ABC):
             pages_id.append(page["id"])
             
         return pages_id
+    
+    def delete_pages(self, pages_id: list[str]) -> bool:
+        """Try to delete the pages with the given id.
+
+        Args:
+            pages_id (list[str]): A list of the pages id to delete.
+
+        Returns:
+            bool: True if all pages were deleted successfully, False otherwise.
+        """
+        
+        for page_id in pages_id:
+            response = query_notion(
+                f"/pages/{page_id}",
+                method="PATCH",
+                notion_api_key=self.notion_api_key,
+                data=json_dumps({ "archived": True })
+            )
+            
+            if not response.ok:
+                return False
+        
+        return True
     
     def build_page_object(self, page_info: dict, to_post: bool) -> dict:
         """Build the page object to insert inside the database.
@@ -178,7 +204,7 @@ class NotionWriter(ABC):
             str: a pleasant way to present the given country if supported.
         """
         
-        if NotionWriter.countries[player_country] is not None:
+        if player_country in NotionWriter.countries:
             return NotionWriter.countries[player_country]
         else:
             return player_country

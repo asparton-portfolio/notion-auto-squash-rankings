@@ -1,29 +1,29 @@
 from bs4 import BeautifulSoup
+from rank_scrapers.utils import get_selenium_from_url
+from selenium.webdriver.common.by import By
 
-from rank_scrapers.RankScraper import RankScraper
-from rank_scrapers.utils import get_bs4_from_url
-
-class FrenchRankScraper(RankScraper):
-    def __init__(self, men=True):
-        """Instanciate a FrenchRankScraper that will be able to scrap 
-           information about men or women french squash ranking.
-
-        Args:
-            men (bool, optional): To scrap men or women ranking. Defaults to True.
-        """
+class FrenchRankScraper:
+    SCRAP_URL = "https://squashnet.fr/classements"
         
-        RankScraper.__init__(
-            self,
-            "https://squashnet.fr/classements",
-            men
-        )
+    def scrap(*, men=True, nb_players=10) -> list[dict]:
+        if nb_players > 10:
+            raise Exception("Can't scrap more than the first 10 players " + 
+                            "for the french ranking.")
         
-    def scrap(self) -> list[dict]:
         scrap_res = []
         
-        doc = get_bs4_from_url(self.url, True)
+        driver = get_selenium_from_url(FrenchRankScraper.SCRAP_URL)
+        body = driver.find_element(By.XPATH, "//body").get_attribute("innerHTML")
+        if not men:
+            woman_label = driver.find_element(
+                By.CSS_SELECTOR,
+                "#filters .checkbox:nth-child(3) label"
+            )
+            woman_label.click()
+            body = driver.find_element(By.XPATH, "//body").get_attribute("innerHTML")
+        driver.close()
 
-        players_info = FrenchRankScraper.get_players_ranking_info(doc)
+        players_info = FrenchRankScraper.get_players_ranking_info(BeautifulSoup(body, "html5lib"))
         for player_info in players_info:
             scrap_res.append({
                 "name": FrenchRankScraper.get_player_name(player_info),
@@ -78,4 +78,4 @@ class FrenchRankScraper(RankScraper):
             int: The player's rank
         """
         
-        return int(table_row.findChildren()[0].string)
+        return int(table_row.findChildren()[5].string)

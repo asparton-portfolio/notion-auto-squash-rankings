@@ -47,7 +47,11 @@ class WorldRankWriter(NotionWriter):
             
             if not response.ok:
                 return False
-            
+        
+        # Remove the other pages of the db if needed
+        if len(pages_id) > 0:
+            return self.delete_pages(self, pages_id)
+    
         return True
     
     def build_page_object(self, page_info, to_post):

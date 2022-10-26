@@ -1,31 +1,29 @@
 from bs4 import BeautifulSoup
 
-from rank_scrapers.RankScraper import RankScraper
 from rank_scrapers.utils import get_bs4_from_url
 
-class WorldRankScraper(RankScraper):
+class WorldRankScraper:
     ROOT_URL = "http://www.squashinfo.com/rankings/"
-    
-    def __init__(self, men=True):
-        """Instanciate a WorldRankScraper that will be able to scrap 
-           information about men or women world squash ranking.
+        
+    def scrap(*, men=True, nb_players=10) -> list[dict]:
+        """Scraps the world ranking information of nb_players players.
 
         Args:
-            men (bool, optional): To scrap men or women ranking. Defaults to True.
+            men (bool, optional): To scrap men ranking. Defaults to True.
+            nb_players (int, optional): Number of players to scrap. Defaults to 10.
+
+        Returns:
+            list[dict]: _description_
         """
         
-        RankScraper.__init__(
-            self,
-            WorldRankScraper.ROOT_URL + ("men" if men else "women"),
-            men
-        )
+        scrap_url = WorldRankScraper.ROOT_URL
+        scrap_url += "men" if men else "women"
         
-    def scrap(self) -> list[dict]:
         scrap_res = []
         
-        doc = get_bs4_from_url(self.url)
+        doc = get_bs4_from_url(scrap_url)
         
-        players_info = WorldRankScraper.get_players_ranking_info(doc)
+        players_info = WorldRankScraper.get_players_ranking_info(doc, nb_players)
         for player_info in players_info:
             scrap_res.append({
                 "name": WorldRankScraper.get_player_name(player_info),
