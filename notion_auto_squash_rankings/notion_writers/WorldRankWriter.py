@@ -28,7 +28,7 @@ class WorldRankWriter(NotionWriter):
             bool: True if the update was successful, False otherwise.
         """
         
-        pages_id = self.get_current_pages_id()
+        pages_id = self._get_current_pages_id()
         
         for player_ranking in players_ranking:
             method = "POST"
@@ -41,8 +41,8 @@ class WorldRankWriter(NotionWriter):
             response = query_notion(
                 api_endpoint,
                 method=method,
-                notion_api_key=self.notion_api_key,
-                data=self.build_page_object(player_ranking, method == "POST")
+                notion_api_key=self._notion_api_key,
+                data=self._build_page_object(player_ranking, method == "POST")
             )
             
             if not response.ok:
@@ -50,11 +50,11 @@ class WorldRankWriter(NotionWriter):
         
         # Remove the other pages of the db if needed
         if len(pages_id) > 0:
-            return self.delete_pages(self, pages_id)
+            return self._delete_pages(self, pages_id)
     
         return True
     
-    def build_page_object(self, page_info, to_post):
+    def _build_page_object(self, page_info, to_post):
         """Build the page object to insert inside the database.
 
         Args:
@@ -65,12 +65,12 @@ class WorldRankWriter(NotionWriter):
             dict: The dictionnary that will be used to insert or update a page.
         """
         
-        page_object = NotionWriter.build_page_object(self, page_info, to_post)
+        page_object = NotionWriter._build_page_object(self, page_info, to_post)
         page_object["properties"]["Country"] = {
             "rich_text": [
                 {
                     "text": {
-                        "content": NotionWriter.get_player_country(page_info["country"])
+                        "content": NotionWriter._get_player_country(page_info["country"])
                     }
                 }
             ]

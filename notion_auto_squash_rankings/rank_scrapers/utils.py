@@ -1,10 +1,12 @@
-"""Defines utils functions for RankScrapers.
+"""Defines internal utils functions for RankScrapers.
 
 Functions:
     get_bs4_from_url(url: str) -> BeautifulSoup: 
         Send an HTTP GET request to the url given and if it succeeds, 
         returns a BeautifulSoup instance with the corresponding HTML.
         If not, returns None.
+    get_selenium_from_url(url: str) -> Firefox:
+        Create a selenium driver instance with the loaded url.
 """
 
 from requests import get

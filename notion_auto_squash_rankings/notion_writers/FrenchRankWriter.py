@@ -38,7 +38,7 @@ class FrenchRankWriter(NotionWriter):
             bool: True if the update was successful, False otherwise.
         """
         
-        pages_id = self.get_current_pages_id()
+        pages_id = self._get_current_pages_id()
         
         for player_ranking in players_ranking:
             method = "POST"
@@ -51,9 +51,9 @@ class FrenchRankWriter(NotionWriter):
             response = query_notion(
                 api_endpoint,
                 method=method,
-                notion_api_key=self.notion_api_key,
+                notion_api_key=self._notion_api_key,
                 data=json_dumps(
-                    NotionWriter.build_page_object(
+                    NotionWriter._build_page_object(
                         self, 
                         player_ranking, 
                         method == "POST"
@@ -66,6 +66,6 @@ class FrenchRankWriter(NotionWriter):
             
         # Remove the other pages of the db if needed
         if len(pages_id) > 0:
-            return self.delete_pages(self, pages_id)
+            return self._delete_pages(self, pages_id)
             
         return True

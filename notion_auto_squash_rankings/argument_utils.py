@@ -18,7 +18,7 @@ Functions:
 from dotenv import dotenv_values
 from sys import argv
 
-def get_notion_api_key() -> str:
+def get_notion_api_key() -> str | None:
     """Try to get the notion api key needed to call the Notion API. 
 
     Returns:
@@ -30,7 +30,7 @@ def get_notion_api_key() -> str:
         return argv[1]
     return None
 
-def get_french_db_id() -> str:
+def get_french_db_id() -> str | None:
     """Try to get the french database id in which to write the information.
 
     Returns:
@@ -46,7 +46,7 @@ def get_french_db_id() -> str:
             return arg_val
         return None
 
-def get_world_db_id() -> str:
+def get_world_db_id() -> str | None:
     """Try to get the world database id in which to write the information.
 
     Returns:
@@ -78,7 +78,7 @@ def get_gender() -> bool:
             return arg_val == "male"
         return True
 
-def get_pair_argument(arg_position: int) -> tuple[str, str]:
+def get_pair_argument(arg_position: int) -> tuple[str, str] | tuple[None, None]:
     """Try to retrieve the command line argument at the given position 
        assuming its a key value pair (key=value).
 

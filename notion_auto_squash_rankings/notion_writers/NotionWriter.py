@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from notion_writers.utils import query_notion
 from datetime import datetime
 from json import dumps as json_dumps
+from notion_writers.NotionAPIException import NotionAPIException
 
 class NotionWriter(ABC):
     """Base abstract class defining how to update the Notion database 
@@ -14,20 +15,20 @@ class NotionWriter(ABC):
         update_db(self, player_ranking: list[dict]) -> bool:
             Abstract method that will be used to update the current database 
             with the given players ranking information.
-        get_current_pages_id(self) -> list[str]:
+        _get_current_pages_id(self) -> list[str]:
             Retrieve the id of the pages currently present in the database.
-        build_page_object(self, page_info: dict, to_post: bool) -> dict:
+        _build_page_object(self, page_info: dict, to_post: bool) -> dict:
             Build the page object to insert inside the database.
     
     Class methods:
         get_player_emoji(player_rank: int) -> str:
             Returns an emoji describing the player depending on the given rank.
-        get_player_country(player_country: str) -> str:
+        _get_player_country(player_country: str) -> str:
             Determine a pleasant way to present the given country.
     """
 
     # Supported countries
-    countries = {
+    _COUNTRIES = {
         "EGY": "🇪🇬 Egypt",
         "NZL": "🇳🇿 New Zealand",
         "ENG": "🇬🇧 England",
@@ -70,10 +71,10 @@ class NotionWriter(ABC):
         # Check if the given notion api key and database id are valid
         res = query_notion(f"/databases/{db_id}", notion_api_key=notion_api_key)
         if not res.ok:
-            raise Exception(res.json()["message"])
+            raise NotionAPIException(res.json()["message"])
         
-        self.notion_api_key = notion_api_key
-        self.db_id = db_id
+        self._notion_api_key = notion_api_key
+        self._db_id = db_id
         
     @abstractmethod
     def update_db(self, players_ranking: list[dict]) -> bool:
@@ -89,7 +90,7 @@ class NotionWriter(ABC):
         
         pass
     
-    def get_current_pages_id(self) -> list[str]:
+    def _get_current_pages_id(self) -> list[str]:
         """Retrieve the id of the pages currently present in the database.
 
         Returns:
@@ -99,15 +100,15 @@ class NotionWriter(ABC):
         pages_id = []
         
         for page in query_notion(
-            f"/databases/{self.db_id}/query",
+            f"/databases/{self._db_id}/query",
             method="POST",
-            notion_api_key=self.notion_api_key
+            notion_api_key=self._notion_api_key
         ).json()["results"]:
             pages_id.append(page["id"])
             
         return pages_id
     
-    def delete_pages(self, pages_id: list[str]) -> bool:
+    def _delete_pages(self, pages_id: list[str]) -> bool:
         """Try to delete the pages with the given id.
 
         Args:
@@ -121,7 +122,7 @@ class NotionWriter(ABC):
             response = query_notion(
                 f"/pages/{page_id}",
                 method="PATCH",
-                notion_api_key=self.notion_api_key,
+                notion_api_key=self._notion_api_key,
                 data=json_dumps({ "archived": True })
             )
             
@@ -130,7 +131,7 @@ class NotionWriter(ABC):
         
         return True
     
-    def build_page_object(self, page_info: dict, to_post: bool) -> dict:
+    def _build_page_object(self, page_info: dict, to_post: bool) -> dict:
         """Build the page object to insert inside the database.
 
         Args:
@@ -169,7 +170,7 @@ class NotionWriter(ABC):
             }
         }
         if (to_post):
-            page_object["parent"] = { "database_id": self.db_id }
+            page_object["parent"] = { "database_id": self._db_id }
             
         return page_object
     
@@ -194,7 +195,7 @@ class NotionWriter(ABC):
             return "👤"
         
     @staticmethod
-    def get_player_country(player_country: str) -> str:
+    def _get_player_country(player_country: str) -> str:
         """Determine a pleasant way to present the given country.
 
         Args:
@@ -204,7 +205,7 @@ class NotionWriter(ABC):
             str: a pleasant way to present the given country if supported.
         """
         
-        if player_country in NotionWriter.countries:
-            return NotionWriter.countries[player_country]
+        if player_country in NotionWriter._COUNTRIES:
+            return NotionWriter._COUNTRIES[player_country]
         else:
             return player_country

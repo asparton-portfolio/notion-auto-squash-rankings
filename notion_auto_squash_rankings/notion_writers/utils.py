@@ -1,4 +1,4 @@
-"""Defines utils functions for NotionWriters.
+"""Defines internal utils functions for NotionWriters.
 
 Functions:
     query_notion(
