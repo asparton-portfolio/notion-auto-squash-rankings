@@ -41,10 +41,10 @@ class FrenchRankWriter(NotionWriter):
         pages_id = self._get_current_pages_id()
         
         for player_ranking in players_ranking:
-            method = "POST"
-            api_endpoint = "/pages"
+            method = 'POST'
+            api_endpoint = '/pages'
             if len(pages_id) > 0:
-                method = "PATCH"
+                method = 'PATCH'
                 api_endpoint += f"/{pages_id[0]}"
                 pages_id.remove(pages_id[0])
               
@@ -56,7 +56,7 @@ class FrenchRankWriter(NotionWriter):
                     NotionWriter._build_page_object(
                         self, 
                         player_ranking, 
-                        method == "POST"
+                        method == 'POST'
                     )
                 )
             )

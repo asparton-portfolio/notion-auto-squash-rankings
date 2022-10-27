@@ -10,7 +10,7 @@ class WorldRankScraper:
             Scraps the world ranking information of nb_players players.
     """
     
-    _ROOT_SCRAP_URL = "http://www.squashinfo.com/rankings/"
+    _ROOT_SCRAP_URL = 'http://www.squashinfo.com/rankings/'
         
     @staticmethod
     def scrap(*, men=True, nb_players=10) -> list[dict]:
@@ -25,7 +25,7 @@ class WorldRankScraper:
         """
         
         scrap_url = WorldRankScraper._ROOT_SCRAP_URL
-        scrap_url += "men" if men else "women"
+        scrap_url += 'men' if men else 'women'
         
         scrap_res = []
         
@@ -34,9 +34,9 @@ class WorldRankScraper:
         players_info = WorldRankScraper._get_players_ranking_info(doc, nb_players)
         for player_info in players_info:
             scrap_res.append({
-                "name": WorldRankScraper._get_player_name(player_info),
-                "country": WorldRankScraper.__get_player_country(player_info),
-                "rank": WorldRankScraper._get_player_rank(player_info),   
+                'name': WorldRankScraper._get_player_name(player_info),
+                'country': WorldRankScraper.__get_player_country(player_info),
+                'rank': WorldRankScraper._get_player_rank(player_info),   
             })
             
         return scrap_res
@@ -54,7 +54,7 @@ class WorldRankScraper:
             list[BeautifulSoup]: The HTML table rows containing the information.
         """
         
-        return bs4_root.find("tbody").find("tr").find_all_next("tr", limit=limit)
+        return bs4_root.find('tbody').find('tr').find_all_next('tr', limit=limit)
     
     @staticmethod
     def _get_player_name(table_row: BeautifulSoup) -> str:

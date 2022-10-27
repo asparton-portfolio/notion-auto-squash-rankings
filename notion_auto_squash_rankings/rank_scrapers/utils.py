@@ -17,7 +17,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 from bs4 import BeautifulSoup
 
-def get_bs4_from_url(url: str) -> BeautifulSoup:
+def get_bs4_from_url(url: str) -> BeautifulSoup | None:
     """Send an HTTP GET request to the url given and if it succeeds, 
        returns a BeautifulSoup instance with the url HTML.
        If not, returns None.
@@ -33,7 +33,7 @@ def get_bs4_from_url(url: str) -> BeautifulSoup:
     response = get(url, allow_redirects=False)
     if not response.ok:
         return None
-    return BeautifulSoup(response.text, "html5lib")
+    return BeautifulSoup(response.text, 'html5lib')
 
 def get_selenium_from_url(url: str) -> Firefox:
     """Create a selenium driver instance with the loaded url.
@@ -47,7 +47,7 @@ def get_selenium_from_url(url: str) -> Firefox:
     
     # Setup firefox driver
     firefox_options = Options()
-    firefox_options.add_argument("--headless")
+    firefox_options.add_argument('--headless')
     driver = Firefox(
         service=Service(GeckoDriverManager().install()),
         options=firefox_options

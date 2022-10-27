@@ -16,7 +16,7 @@ from requests import Response
 
 def query_notion(
     endpoint: str, *, 
-    method="GET", 
+    method='GET', 
     data=None, 
     notion_api_key: str
 ) -> Response:
@@ -35,13 +35,13 @@ def query_notion(
     """
     
     headers = {
-        "Authorization": f"Bearer {notion_api_key}",
-        "Notion-Version": "2022-06-28",
-        "Content-Type": "application/json"
+        'Authorization': f'Bearer {notion_api_key}',
+        'Notion-Version': '2022-06-28',
+        'Content-Type': 'application/json'
     }
     
     return request(
-        url=f"https://api.notion.com/v1{endpoint}",
+        url=f'https://api.notion.com/v1{endpoint}',
         method=method, 
         headers=headers,
         data=data

@@ -38,11 +38,11 @@ def get_french_db_id() -> str | None:
     """
     
     arg_key, arg_val = get_pair_argument(2)
-    if arg_key == "french":
+    if arg_key == 'french':
         return arg_val
     else:
         arg_key, arg_val = get_pair_argument(3)
-        if arg_key == "french":
+        if arg_key == 'french':
             return arg_val
         return None
 
@@ -54,11 +54,11 @@ def get_world_db_id() -> str | None:
     """
     
     arg_key, arg_val = get_pair_argument(2)
-    if arg_key == "world":
+    if arg_key == 'world':
         return arg_val
     else:
         arg_key, arg_val = get_pair_argument(3)
-        if arg_key == "world":
+        if arg_key == 'world':
             return arg_val
         return None
     
@@ -70,12 +70,12 @@ def get_gender() -> bool:
     """
     
     arg_key, arg_val = get_pair_argument(2)
-    if arg_key == "gender":
-        return arg_val == "male"
+    if arg_key == 'gender':
+        return arg_val == 'male'
     else:
         arg_key, arg_val = get_pair_argument(3)
-        if arg_key == "gender":
-            return arg_val == "male"
+        if arg_key == 'gender':
+            return arg_val == 'male'
         return True
 
 def get_pair_argument(arg_position: int) -> tuple[str, str] | tuple[None, None]:
@@ -92,7 +92,7 @@ def get_pair_argument(arg_position: int) -> tuple[str, str] | tuple[None, None]:
     if (len(argv) < arg_position + 1):
         return None, None
     
-    arg = argv[arg_position].split("=")
+    arg = argv[arg_position].split('=')
     if (len(arg) <= 1):
         return None, None
     

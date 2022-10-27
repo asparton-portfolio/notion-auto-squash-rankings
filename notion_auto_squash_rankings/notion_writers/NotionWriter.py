@@ -29,32 +29,32 @@ class NotionWriter(ABC):
 
     # Supported countries
     _COUNTRIES = {
-        "EGY": "🇪🇬 Egypt",
-        "NZL": "🇳🇿 New Zealand",
-        "ENG": "🇬🇧 England",
-        "PER": "🇵🇪 Peru",
-        "FRA": "🇫🇷 France",
-        "WAL": "🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales",
-        "COL": "🇨🇴 Colombia",
-        "IND": "🇮🇳 India",
-        "SUI": "🇨🇭 Switzerland",
-        "GER": "🇩🇪 Germany",
-        "USA": "🇺🇸 United States",
-        "QAT": "🇶🇦 Qatar",
-        "SCO": "🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland",
-        "MEX": "🇲🇽 Mexico",
-        "ESP": "🇪🇸 Spain",
-        "HKG": "🇭🇰 Hong-Kong",
-        "PAK": "🇵🇰 Pakistan",
-        "HUN": "🇭🇺 Hungary",
-        "POR": "🇵🇹 Portugal",
-        "ARG": "🇦🇷 Argentina",
-        "CAN": "🇨🇦 Canada",
-        "MAS": "🇲🇾 Malaysia",
-        "JPN": "🇯🇵 Japan",
-        "GUA": "🇬🇹 Guatemala",
-        "BEL": "🇧🇪 Belgium",
-        "RSA": "🇿🇦 South Africa"
+        'EGY': '🇪🇬 Egypt',
+        'NZL': '🇳🇿 New Zealand',
+        'ENG': '🇬🇧 England',
+        'PER': '🇵🇪 Peru',
+        'FRA': '🇫🇷 France',
+        'WAL': '🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales',
+        'COL': '🇨🇴 Colombia',
+        'IND': '🇮🇳 India',
+        'SUI': '🇨🇭 Switzerland',
+        'GER': '🇩🇪 Germany',
+        'USA': '🇺🇸 United States',
+        'QAT': '🇶🇦 Qatar',
+        'SCO': '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland',
+        'MEX': '🇲🇽 Mexico',
+        'ESP': '🇪🇸 Spain',
+        'HKG': '🇭🇰 Hong-Kong',
+        'PAK': '🇵🇰 Pakistan',
+        'HUN': '🇭🇺 Hungary',
+        'POR': '🇵🇹 Portugal',
+        'ARG': '🇦🇷 Argentina',
+        'CAN': '🇨🇦 Canada',
+        'MAS': '🇲🇾 Malaysia',
+        'JPN': '🇯🇵 Japan',
+        'GUA': '🇬🇹 Guatemala',
+        'BEL': '🇧🇪 Belgium',
+        'RSA': '🇿🇦 South Africa'
     }
 
     def __init__(self, notion_api_key: str, db_id: str):
@@ -69,9 +69,9 @@ class NotionWriter(ABC):
         """
         
         # Check if the given notion api key and database id are valid
-        res = query_notion(f"/databases/{db_id}", notion_api_key=notion_api_key)
+        res = query_notion(f'/databases/{db_id}', notion_api_key=notion_api_key)
         if not res.ok:
-            raise NotionAPIException(res.json()["message"])
+            raise NotionAPIException(res.json()['message'])
         
         self._notion_api_key = notion_api_key
         self._db_id = db_id
@@ -100,11 +100,11 @@ class NotionWriter(ABC):
         pages_id = []
         
         for page in query_notion(
-            f"/databases/{self._db_id}/query",
-            method="POST",
+            f'/databases/{self._db_id}/query',
+            method='POST',
             notion_api_key=self._notion_api_key
-        ).json()["results"]:
-            pages_id.append(page["id"])
+        ).json()['results']:
+            pages_id.append(page['id'])
             
         return pages_id
     
@@ -120,10 +120,10 @@ class NotionWriter(ABC):
         
         for page_id in pages_id:
             response = query_notion(
-                f"/pages/{page_id}",
-                method="PATCH",
+                f'/pages/{page_id}',
+                method='PATCH',
                 notion_api_key=self._notion_api_key,
-                data=json_dumps({ "archived": True })
+                data=json_dumps({ 'archived': True })
             )
             
             if not response.ok:
@@ -143,34 +143,34 @@ class NotionWriter(ABC):
         """
         
         page_object = {
-            "icon": {
-                "emoji": NotionWriter.get_player_emoji(page_info["rank"])
+            'icon': {
+                'emoji': NotionWriter.get_player_emoji(page_info['rank'])
             },
-            "properties": {
+            'properties': {
                 "Player's name": {
-                    "title": [
+                    'title': [
                         {
-                            "type": "text",
-                            "text": {
-                                "content": page_info["name"]
+                            'type': 'text',
+                            'text': {
+                                'content': page_info['name']
                             }
                         }
                     ]
                 },
-                "Rank": {
-                    "number": page_info["rank"]
+                'Rank': {
+                    'number': page_info['rank']
                 },
-                "Date": {
-                    "date": {
-                        "start": str(datetime.now().date()),
-                        "end": None,
-                        "time_zone": None
+                'Date': {
+                    'date': {
+                        'start': str(datetime.now().date()),
+                        'end': None,
+                        'time_zone': None
                     }
                 }
             }
         }
         if (to_post):
-            page_object["parent"] = { "database_id": self._db_id }
+            page_object['parent'] = { 'database_id': self._db_id }
             
         return page_object
     
@@ -186,13 +186,13 @@ class NotionWriter(ABC):
         """
         
         if player_rank == 1:
-            return "🏅"
+            return '🏅'
         elif player_rank == 2:
-            return "🥈"
+            return '🥈'
         elif player_rank == 3:
-            return "🥉"
+            return '🥉'
         else:
-            return "👤"
+            return '👤'
         
     @staticmethod
     def _get_player_country(player_country: str) -> str:

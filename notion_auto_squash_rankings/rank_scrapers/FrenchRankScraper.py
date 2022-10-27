@@ -10,7 +10,7 @@ class FrenchRankScraper:
             Scraps the french ranking information of nb_players players.
     """
     
-    _SCRAP_URL = "https://squashnet.fr/classements"
+    _SCRAP_URL = 'https://squashnet.fr/classements'
         
     @staticmethod
     def scrap(*, men=True, nb_players=10) -> list[dict]:
@@ -27,26 +27,26 @@ class FrenchRankScraper:
         
         if nb_players > 10:
             raise ValueError("Can't scrap more than the first 10 players " + 
-                            "for the french ranking. (To be updated)")
+                            'for the french ranking. (To be updated)')
         
         scrap_res = []
         
         driver = get_selenium_from_url(FrenchRankScraper._SCRAP_URL)
-        body = driver.find_element(By.XPATH, "//body").get_attribute("innerHTML")
+        body = driver.find_element(By.XPATH, '//body').get_attribute('innerHTML')
         if not men:
             woman_label = driver.find_element(
                 By.CSS_SELECTOR,
-                "#filters .checkbox:nth-child(3) label"
+                '#filters .checkbox:nth-child(3) label'
             )
             woman_label.click()
-            body = driver.find_element(By.XPATH, "//body").get_attribute("innerHTML")
+            body = driver.find_element(By.XPATH, '//body').get_attribute('innerHTML')
         driver.close()
 
-        players_info = FrenchRankScraper._get_players_ranking_info(BeautifulSoup(body, "html5lib"))
+        players_info = FrenchRankScraper._get_players_ranking_info(BeautifulSoup(body, 'html5lib'))
         for player_info in players_info:
             scrap_res.append({
-                "name": FrenchRankScraper._get_player_name(player_info),
-                "rank": FrenchRankScraper._get_player_rank(player_info),
+                'name': FrenchRankScraper._get_player_name(player_info),
+                'rank': FrenchRankScraper._get_player_rank(player_info),
             })
             
         return scrap_res
@@ -65,8 +65,8 @@ class FrenchRankScraper:
         """
         
         return bs4_root.find(
-            "div", {"class": "row header"}
-        ).find_all_next("div", class_="row", limit=limit)
+            'div', {'class': 'row header'}
+        ).find_all_next('div', class_='row', limit=limit)
     
     @staticmethod
     def _get_player_name(table_row: BeautifulSoup) -> str:
@@ -83,7 +83,7 @@ class FrenchRankScraper:
         full_name = table_row.findChildren()[3].string
         last_name = full_name.split()[0].capitalize()
         first_name = full_name.split()[1].capitalize()
-        return f"{first_name} {last_name}"
+        return f'{first_name} {last_name}'
     
     @staticmethod
     def _get_player_rank(table_row: BeautifulSoup) -> int:
